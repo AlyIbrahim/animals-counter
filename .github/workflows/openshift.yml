@@ -49,9 +49,9 @@ env:
 #   IMAGE_REGISTRY_USER: ${{ github.actor }}
 #   IMAGE_REGISTRY_PASSWORD: ${{ github.token }}
   
-  IMAGE_REGISTRY: quay.io/aibrahim
-  IMAGE_REGISTRY_USER: ${{ secrets.QUAY_USER }}
-  IMAGE_REGISTRY_PASSWORD: ${{ secrets.QUAY_TOKEN }}
+  IMAGE_REGISTRY: ${{ secrets.IMAGE_REGISTRY }}
+  IMAGE_REGISTRY_USER: ${{ secrets.IMAGE_REGISTRY_USERNAME }}
+  IMAGE_REGISTRY_PASSWORD: ${{ secrets.IMAGE_REGISTRY_PASSWORD }}
 
   # 🖊️ EDIT to specify custom tags for the container image, or default tags will be generated below.
   IMAGE_TAGS: ""
