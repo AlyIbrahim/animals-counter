@@ -16,6 +16,7 @@ public class Animal {
         this.age = age;
     }
 
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
     public String name;
     public String type;
