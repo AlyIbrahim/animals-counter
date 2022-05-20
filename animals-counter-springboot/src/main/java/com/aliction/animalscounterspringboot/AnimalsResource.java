@@ -1,5 +1,7 @@
 package com.aliction.animalscounterspringboot;
 
+import java.util.List;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,13 @@ public class AnimalsResource {
     @Autowired
     MeterRegistry meterRegistry;
 
+
+    @GetMapping("{type}")
+    public List<Animal> GetAnimal(@PathVariable(value = "type") String type){
+	List<Animal> animals = new ArrayList<>();
+	animalRepository.findByType(type).forEach(animals::add);
+        return animals;
+    }
 
     @GetMapping("dogs/{name}")
     public String Dogs(@PathVariable(value = "name") String name){
