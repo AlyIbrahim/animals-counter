@@ -1,10 +1,13 @@
 package com.aliction.animalscounterspringboot;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -27,7 +30,16 @@ public class AnimalsResource {
         return animals;
     }
 
-    @GetMapping("dogs/{name}")
+    @DeleteMapping("{id}")
+    public String DeleteAnimal (@PathVariable(value = "id") Long id ){
+        Animal animal = animalRepository.findById(id).get();
+        animalRepository.deleteById(id);
+        // System.out.println(animal.id + " " + animal.name + " " + animal.type);
+        // animalRepository.delete(animal);
+        return "Animal with id " + id + " and type " + animal.type + " has been deleted.";
+    }
+
+    @PostMapping("dogs/{name}")
     public String Dogs(@PathVariable(value = "name") String name){
         meterRegistry.counter("animals.dogs.count").increment();
         Animal dog = new Animal(name, "dog", 1);
@@ -35,7 +47,7 @@ public class AnimalsResource {
         return "Adding a new dog " + name;
     }
 
-    @GetMapping("cats/{name}")
+    @PostMapping("cats/{name}")
     public String Cats(@PathVariable(value = "name") String name){
         meterRegistry.counter("animals.cats.count").increment();
         Animal cat = new Animal(name, "cat", 1);
@@ -43,7 +55,7 @@ public class AnimalsResource {
         return "Adding a new cat " + name;
     }
 
-    @GetMapping("horses/{name}")
+    @PostMapping("horses/{name}")
     public String Horses(@PathVariable(value = "name") String name){
         meterRegistry.counter("animals.horses.count").increment();
         Animal horse = new Animal(name, "horse", 1);
