@@ -22,6 +22,11 @@ public class AnimalsResource {
     @Autowired
     MeterRegistry meterRegistry;
 
+    @GetMapping()
+    public List<Animal> GetAnimals(){
+     List<Animal> animals = animalRepository.findAll();
+        return animals;
+    }
 
     @GetMapping("{type}")
     public List<Animal> GetAnimal(@PathVariable(value = "type") String type){
