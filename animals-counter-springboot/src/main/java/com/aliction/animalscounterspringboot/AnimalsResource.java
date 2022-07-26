@@ -4,16 +4,19 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import io.micrometer.core.instrument.MeterRegistry;
 
 @RestController
 @RequestMapping("animals")
+@CrossOrigin(origins = "*")
 public class AnimalsResource {
 
     @Autowired
@@ -26,6 +29,14 @@ public class AnimalsResource {
     public List<Animal> GetAnimals(){
      List<Animal> animals = animalRepository.findAll();
         return animals;
+    }
+
+    @PostMapping()
+    public Animal AddAnimal(@RequestBody Animal animal){
+        System.out.println("Adding a new " + animal.type + " " + animal.name);
+        Animal newAnimal = animalRepository.save(animal);
+        meterRegistry.counter("animals."+animal.type+"s.count").increment();
+        return newAnimal;
     }
 
     @GetMapping("{type}")
@@ -60,7 +71,7 @@ public class AnimalsResource {
         return "Adding a new cat " + name;
     }
 
-    @PostMapping("horses/{name}")
+    @PostMapping("horses/{name}/")
     public String Horses(@PathVariable(value = "name") String name){
         meterRegistry.counter("animals.horses.count").increment();
         Animal horse = new Animal(name, "horse", 1);
